@@ -92,12 +92,22 @@ class TokenClass:
 
 
 class TokenSpec:
-    def __init__(self):
-        self.tokens = []
+   class TokenSpec:
+    def __init__(self, tokens=None):
+        self.tokens = list(tokens) if tokens is not None else []
 
     @property
     def names(self):
         return [token.name for token in self.tokens]
+
+    def __iter__(self):
+        return iter(self.tokens)
+
+    def __len__(self):
+        return len(self.tokens)
+
+    def __getitem__(self, index):
+        return self.tokens[index]
 
 
 class RegexChecker:
