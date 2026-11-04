@@ -73,8 +73,8 @@ def load_spec(source: str | Path) -> TokenSpec:
     priority for maximal-munch tie-breaking: earlier = higher priority).
     """
     # TODO(PART A1): implement
-    r"""Part A1 - Token specification loader and validator."""
-
+   
+r"""Part A1 - Token specification loader and validator."""
 import json
 from pathlib import Path
 
