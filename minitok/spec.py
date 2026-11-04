@@ -1,6 +1,6 @@
 r"""Part A1 — Token specification loader and validator.
 
-A token specification is a JSON object:
+ A token specification is a JSON object:
 
 {
   "tokens": [
