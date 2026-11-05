@@ -7,7 +7,7 @@ write "Individual work" in the table below.
 
 | Name | Student ID | GitHub username |
 |---|---|---|
-| <!-- full name --> | <!-- ID --> | <!-- @username --> |
+| Mariam Ali Jnahi | 202307601 | MariamJanahi |
 | <!-- full name --> | <!-- ID --> | <!-- @username --> |
 
 ## Contributions
@@ -17,5 +17,5 @@ report sections). The shares must sum to 100%.
 
 | Member | Main contributions | Approx. share |
 |---|---|---|
-| <!-- name --> | <!-- e.g. A1 spec loader, A2 regex parser, CLI, report §comparison --> | <!-- % --> |
+| MariamJanahi |  A1 spec loader, A2 regex parser,  | <!-- % --> |
 | <!-- name --> | <!-- e.g. A3 determinization, A4 scanner, examples, report §theory --> | <!-- % --> |
