@@ -1,4 +1,4 @@
-r"""Part A1 — Token specification loader and validator.
+ r"""Part A1 — Token specification loader and validator.
 
  A token specification is a JSON object:
 
