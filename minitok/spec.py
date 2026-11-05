@@ -92,7 +92,6 @@ class TokenClass:
 
 
 class TokenSpec:
-   class TokenSpec:
     def __init__(self, tokens=None):
         self.tokens = list(tokens) if tokens is not None else []
 
@@ -108,8 +107,6 @@ class TokenSpec:
 
     def __getitem__(self, index):
         return self.tokens[index]
-
-
 class RegexChecker:
     r"""Walks through a regex once. It checks the syntax (parentheses and
     shorthand classes) and works out if the regex can match the empty string.
