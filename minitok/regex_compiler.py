@@ -1,4 +1,4 @@
-"""Part A2 — Regular-expression compiler: regex -> NFA (Thompson's construction).
+ """Part A2 — Regular-expression compiler: regex -> NFA (Thompson's construction).
 
 Grammar you must support (see spec.py for the surface syntax):
 
