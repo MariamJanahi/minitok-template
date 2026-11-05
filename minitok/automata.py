@@ -42,23 +42,34 @@ class NFA:
     accepts: set[int] = field(default_factory=set)
 
     def simulate(self, s: str) -> bool:
-        """True iff this NFA accepts string s (on-the-fly subset simulation
-        with epsilon closures). Must handle epsilon cycles."""
-        # TODO(PART A2/A3): implement
-        raise NotImplementedError("NFA.simulate is not implemented yet")
+        """True iff this NFA accepts string s."""
+        current = self._closure({self.start})
 
+        for ch in s:
+            next_states = set()
+            for state in current:
+                if state in self.transitions and ch in self.transitions[state]:
+                    next_states.update(self.transitions[state][ch])
+            current = self._closure(next_states)
 
-@dataclass
-class DFA:
-    states: set[int] = field(default_factory=set)
-    alphabet: set[str] = field(default_factory=set)
-    transitions: dict[int, dict[str, int]] = field(default_factory=dict)
-    start: int = 0
-    # tokenizer DFAs label accepting states with token-class names:
-    accepts: dict[int, str] = field(default_factory=dict)
+        for state in current:
+            if state in self.accepts:
+                return True
+        return False
 
-    def simulate(self, s: str) -> str | None:
-        """Return the accepting label for s, or None if rejected/incomplete."""
+    def _closure(self, states):
+        """All states reachable from `states` using only epsilon moves."""
+        result = set(states)
+        to_visit = list(states)
+
+        while to_visit:
+            state = to_visit.pop()
+            if state in self.transitions and EPS in self.transitions[state]:
+                for next_state in self.transitions[state][EPS]:
+                    if next_state not in result:
+                        result.add(next_state)
+                        to_visit.append(next_state)
+        return result
         # TODO(PART A3): implement
         raise NotImplementedError("DFA.simulate is not implemented yet")
 
