@@ -17,5 +17,5 @@ report sections). The shares must sum to 100%.
 
 | Member | Main contributions | Approx. share |
 |---|---|---|
-| MariamJanahi |  A1 spec loader, A2 regex parser,  | <!-- % --> |
+| MariamJanahi |  A1 spec loader, A2 regex parser, A part of automata.py | <!-- % --> |
 | <!-- name --> | <!-- e.g. A3 determinization, A4 scanner, examples, report §theory --> | <!-- % --> |
