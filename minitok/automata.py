@@ -80,7 +80,7 @@ class DFA:
     alphabet: set[str] = field(default_factory=set)
     transitions: dict[int, dict[str, int]] = field(default_factory=dict)
     start: int = 0
-    accept: dict[int, str] = field(defualt_factory=dict)
+    accepts: dict[int, str] = field(default_factory=dict)
 
 
 @dataclass
