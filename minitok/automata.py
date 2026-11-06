@@ -75,6 +75,15 @@ class NFA:
 
 
 @dataclass
+class DFA:
+    states: set[int] = field(default_factory=set)
+    alphabet: set[str] = field(default_factory=set)
+    transitions: dict[int, dict[str, int]] = field(default_factory=dict)
+    start: int = 0
+    accept: dict[int, str] = field(defualt_factory=dict)
+
+
+@dataclass
 class Token:
     type: str
     lexeme: str
@@ -101,6 +110,7 @@ def eps_closure(nfa: NFA, states: set[int]) -> set[int]:
     raise NotImplementedError("eps_closure is not implemented yet")
 
 
+
 def determinize(nfa: NFA, label_of: dict[int, str], priority: list[str]) -> DFA:
     """Subset construction (Sipser §1.2) producing a tokenizer DFA.
 
@@ -108,9 +118,65 @@ def determinize(nfa: NFA, label_of: dict[int, str], priority: list[str]) -> DFA:
     priority: token-class names from highest to lowest priority; when a
     DFA state contains several labeled NFA accept states, keep the label
     with the highest priority (this implements tie-breaking).
-    Transitions must be total over `nfa.alphabet` (use a dead state -1 or
-    omit transitions to it consistently and document your choice).
+    Transitions must be total over `nfa.alphabet`.
     """
+
+    start_state = frozenset(eps_closure(nfa, {nfa.start}))
+
+    dfa_states = {start_state}
+    unprocessed = [start_state]
+
+    dfa_transitions = {}
+    dfa_accepts = {}
+
+    state_ids = {start_state: 0}
+
+    while unprocessed:
+        current = unprocessed.pop(0)
+        current_id = state_ids[current]
+
+        dfa_transitions[current_id] = {}
+
+        matching_tokens = [
+            label_of[state]
+            for state in current
+            if state in label_of
+        ]
+
+        if matching_tokens:
+            chosen = min(
+                matching_tokens,
+                key=lambda token: priority.index(token)
+            )
+            dfa_accepts[current_id] = chosen
+
+        for symbol in sorted(nfa.alphabet):
+            next_states = set()
+
+            for state in current:
+                if state in nfa.transitions:
+                    next_states.update(
+                        nfa.transitions[state].get(symbol, set())
+                    )
+
+            next_subset = frozenset(
+                eps_closure(nfa, next_states)
+            )
+
+            if next_subset not in dfa_states:
+                dfa_states.add(next_subset)
+                state_ids[next_subset] = len(state_ids)
+                unprocessed.append(next_subset)
+
+            dfa_transitions[current_id][symbol] = state_ids[next_subset]
+
+    return DFA(
+        states=set(state_ids.values()),
+        alphabet=set(nfa.alphabet),
+        transitions=dfa_transitions,
+        start=0,
+        accepts=dfa_accepts
+    )
     # TODO(PART A3): implement
     raise NotImplementedError("determinize is not implemented yet")
 
