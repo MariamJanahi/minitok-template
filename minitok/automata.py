@@ -83,6 +83,20 @@ class Token:
 
 def eps_closure(nfa: NFA, states: set[int]) -> set[int]:
     """Epsilon closure of a set of NFA states."""
+
+    result = set(states)
+    to_visit = list(states)
+
+    while to_visit:
+        state = to_visit.pop()
+
+        if state in nfa.transitions and EPS in nfa.transitions[state]:
+            for next_state in nfa.transitions[state][EPS]:
+                if next_state not in result:
+                    result.add(next_state)
+                    to_visit.append(next_state)
+
+    return result
     # TODO(PART A2/A3): implement
     raise NotImplementedError("eps_closure is not implemented yet")
 
