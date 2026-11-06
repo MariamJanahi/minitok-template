@@ -181,6 +181,7 @@ def determinize(nfa: NFA, label_of: dict[int, str], priority: list[str]) -> DFA:
     raise NotImplementedError("determinize is not implemented yet")
 
 
+
 def build_token_dfa(spec: "TokenSpec") -> DFA:
     """Compile every token class of the spec into one combined DFA.
 
@@ -188,6 +189,64 @@ def build_token_dfa(spec: "TokenSpec") -> DFA:
     NFAs with a new start state and epsilon edges, then determinize with
     per-class labels and spec-order priority.
     """
+
+    token_classes = list(spec)
+
+    priority = [token.name for token in token_classes]
+
+    new_start = 0
+    next_state = 1
+
+    combined_states = {new_start}
+    combined_alphabet = set()
+    combined_transitions = {}
+    label_of = {}
+
+    for token in token_classes:
+        nfa = compile_regex(token.regex)
+
+        state_map = {}
+
+        for state in sorted(nfa.states):
+            state_map[state] = next_state
+            combined_states.add(next_state)
+            next_state += 1
+
+        combined_transitions.setdefault(new_start, {})
+        combined_transitions[new_start].setdefault(EPS, set())
+        combined_transitions[new_start][EPS].add(
+            state_map[nfa.start]
+        )
+
+        combined_alphabet.update(nfa.alphabet)
+
+        for state, transitions in nfa.transitions.items():
+            new_state = state_map[state]
+
+            combined_transitions.setdefault(new_state, {})
+
+            for symbol, destinations in transitions.items():
+                combined_transitions[new_state].setdefault(
+                    symbol, set()
+                )
+
+                for destination in destinations:
+                    combined_transitions[new_state][symbol].add(
+                        state_map[destination]
+                    )
+
+        for accept_state in nfa.accepts:
+            label_of[state_map[accept_state]] = token.name
+
+    combined_nfa = NFA(
+        states=combined_states,
+        alphabet=combined_alphabet,
+        transitions=combined_transitions,
+        start=new_start,
+        accepts=set(label_of.keys())
+    )
+
+    return determinize(combined_nfa, label_of, priority)
     # TODO(PART A3): implement
     raise NotImplementedError("build_token_dfa is not implemented yet")
 
