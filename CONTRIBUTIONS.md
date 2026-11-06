@@ -8,7 +8,7 @@ write "Individual work" in the table below.
 | Name | Student ID | GitHub username |
 |---|---|---|
 | Mariam Ali Jnahi | 202307601 | MariamJanahi |
-| <!-- full name --> | <!-- ID --> | <!-- @username --> |
+| Aisha Nabeel Mohamed | 202310007 | aishanabeel07 |
 
 ## Contributions
 
