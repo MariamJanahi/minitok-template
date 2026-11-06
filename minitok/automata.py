@@ -260,5 +260,56 @@ def scan(dfa: DFA, spec: "TokenSpec", text: str) -> list[Token]:
     ScanError with the failing position. Must handle end-of-input while
     inside a token (e.g. text ending in an identifier).
     """
+
+    token_info = {
+        token.name: token
+        for token in spec
+    }
+
+    tokens = []
+    position = 0
+
+    while position < len(text):
+        current_state = dfa.start
+        index = position
+
+        last_accept = None
+        last_accept_position = position
+
+        while index < len(text):
+            symbol = text[index]
+
+            if symbol not in dfa.transitions.get(current_state, {}):
+                break
+
+            current_state = dfa.transitions[current_state][symbol]
+            index += 1
+
+            if current_state in dfa.accepts:
+                last_accept = dfa.accepts[current_state]
+                last_accept_position = index 
+
+        if last_accept is None:
+            raise ScanError(
+                f"No token matches at position {position}",
+                position
+            )
+
+        lexeme = text[position:last_accept_position]
+
+        token_class = token_info[last_accept]
+
+        if not token_class.skip:
+            tokens.append(
+                Token(
+                    type=last_accept,
+                    lexeme=lexeme,
+                    position=position
+                )
+            )
+
+        position = last_accept_position
+
+    return tokens
     # TODO(PART A4): implement
     raise NotImplementedError("scan is not implemented yet")
