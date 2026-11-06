@@ -1,4 +1,4 @@
-import tiktoken
+ import tiktoken
 
 # Your sample text (at least 2 KB: mix of code and normal text)
 sample_text = """
